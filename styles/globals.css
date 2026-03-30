@@ -1,3 +1,37 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+* {
+  box-sizing: border-box;
+}
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-color);
+  transition: background-color 0.3s;
+}
+
+:root {
+  --bg-color: #ffffff;
+  --text-color: #000000;
+  --secondary-text: #666666;
+  --muted-text: #888888;
+  --border-color: #eeeeee;
+  --card-border: #000000;
+  --btn-bg: #000000;
+  --btn-text: #ffffff;
+  --input-bg: transparent;
+  --divider: #fafafa;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-color: #0c0c0c;
+    --text-color: #ffffff;
+    --secondary-text: #aaaaaa;
+    --muted-text: #777777;
+    --border-color: #222222;
+    --card-border: #ffffff;
+    --btn-bg: #ffffff;
+    --btn-text: #000000;
+    --input-bg: rgba(255, 255, 255, 0.05);
+    --divider: #151515;
+  }
+}
