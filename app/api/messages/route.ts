@@ -5,8 +5,10 @@ export async function GET() {
   try {
     const redis = await getRedisClient();
     if (!redis) throw new Error('Redis connection failed');
-    const messages = await redis.lrange('messages', 0, 99);
-    return NextResponse.json(messages.map(m => JSON.parse(m)));
+    const messages = await redis.lRange('messages', 0, 99);
+    // Explicitly quit to prevent Vercel from hanging the function
+    await redis.quit(); 
+    return NextResponse.json((messages || []).map(m => JSON.parse(m)));
   } catch (error) {
     console.error('Redis error:', error);
     return NextResponse.json({ error: 'Failed to fetch messages' }, { status: 500 });
@@ -32,8 +34,9 @@ export async function POST(request: Request) {
 
     const redis = await getRedisClient();
     if (!redis) throw new Error('Redis connection failed');
-    await redis.lpush('messages', JSON.stringify(message));
-
+    await redis.lPush('messages', JSON.stringify(message));
+    // Explicitly quit to prevent Vercel from hanging the function
+    await redis.quit();
     return NextResponse.json(message);
   } catch (error) {
     console.error('Redis error:', error);
