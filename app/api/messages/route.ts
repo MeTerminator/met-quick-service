@@ -4,7 +4,8 @@ import { getRedisClient } from '@/lib/redis';
 export async function GET() {
   try {
     const redis = await getRedisClient();
-    const messages = await redis.lRange('messages', 0, 99);
+    if (!redis) throw new Error('Redis connection failed');
+    const messages = await redis.lrange('messages', 0, 99);
     return NextResponse.json(messages.map(m => JSON.parse(m)));
   } catch (error) {
     console.error('Redis error:', error);
@@ -30,7 +31,8 @@ export async function POST(request: Request) {
     };
 
     const redis = await getRedisClient();
-    await redis.lPush('messages', JSON.stringify(message));
+    if (!redis) throw new Error('Redis connection failed');
+    await redis.lpush('messages', JSON.stringify(message));
 
     return NextResponse.json(message);
   } catch (error) {
